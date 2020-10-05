@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import GrayMatter from 'gray-matter';
-import ReactMarkdown from 'react-markdown';
 import marked from 'marked';
-import CodeBlocks from '../components/CodeBlocks';
-import { useRouter } from 'next/router';
+import { RenderMarkdown } from 'use-syntaxer';
 
 /*
 ```js
@@ -12,13 +10,11 @@ console.log('hello');
 */
 
 const index = () => {
-  const router = useRouter();
-
   const [formData, setFormData] = useState({
     code: '',
   });
 
-  const [mdContent, setMdContent] = useState('');
+  const [previewRequested, setPreviewRequested] = useState(false);
 
   const [mdHTML, setMdHTML] = useState('');
 
@@ -30,20 +26,25 @@ const index = () => {
     const mdData = GrayMatter(input);
     const html = marked(mdData.content);
     setMdHTML(html);
+    setPreviewRequested(false);
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const mdData = GrayMatter(code);
-    setMdContent(mdData.content);
-    localStorage.setItem('mdContent', mdData.content);
-    // router.push('/posts');
+    setPreviewRequested(true);
   };
 
   const { code } = formData;
 
   return (
     <div className='container'>
+      <div>
+        {previewRequested ? (
+          <RenderMarkdown code={code} />
+        ) : (
+          <div dangerouslySetInnerHTML={{ __html: mdHTML }} />
+        )}
+      </div>
       <form onSubmit={onSubmit}>
         <div className='input-field'>
           <textarea
@@ -65,14 +66,6 @@ const index = () => {
           </button>
         </div>
       </form>
-
-      <div>
-        {mdContent.split('').length > 0 ? (
-          <ReactMarkdown source={mdContent} renderers={{ code: CodeBlocks }} />
-        ) : (
-          <div dangerouslySetInnerHTML={{ __html: mdHTML }} />
-        )}
-      </div>
     </div>
   );
 };

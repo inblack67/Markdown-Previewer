@@ -6,7 +6,7 @@ const Navbar = () => {
       <div className='nav-wrapper'>
         <div className='container'>
           <Link href='/'>
-            <a className='brand-logo'>
+            <a className='brand-logo center'>
               Markdown <span className='red-text'>Previewer</span>
             </a>
           </Link>

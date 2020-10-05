@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 
 /*
 ```js
-console.log('heelo');
+console.log('hello');
 ```
 */
 
@@ -37,7 +37,7 @@ const index = () => {
     const mdData = GrayMatter(code);
     setMdContent(mdData.content);
     localStorage.setItem('mdContent', mdData.content);
-    router.push('/posts');
+    // router.push('/posts');
   };
 
   const { code } = formData;
@@ -47,6 +47,7 @@ const index = () => {
       <form onSubmit={onSubmit}>
         <div className='input-field'>
           <textarea
+            required
             value={code}
             onChange={onChange}
             className='materialize-textarea'
@@ -56,6 +57,7 @@ const index = () => {
             rows='10'
           ></textarea>
           <label htmlFor='code'>Code</label>
+          <span className='helper-text red-text'>Enter Your Markdown Code</span>
         </div>
         <div className='input-field'>
           <button type='submit' className='btn red'>
